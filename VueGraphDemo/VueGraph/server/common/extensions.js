@@ -1,9 +1,6 @@
-﻿const enumerable = require("linq");
-const deepEquals = require("fast-deep-equal");
-
-//if (!Array.prototype.asEnumerable) {
-//    Array.prototype.asEnumerable = () => Enumerable.from(this);
-//}
+﻿import enumerable from "linq";
+import deepEquals from "fast-deep-equal";
+import moment from "moment";
 
 Object.defineProperty(Array.prototype, "asEnumerable", {
     value: function asEnumerable() {
@@ -30,14 +27,15 @@ function pad(n, width, z) {
 Object.defineProperty(Object.prototype, "unixTsToDateString", {
     value: function unixTsToDateString() {
         const d = new Date(parseFloat(this));
-        const year = d.getFullYear();
-        const month = d.getMonth() + 1;
-        const day = d.getDate();
-        const hour = d.getHours();
-        const min = d.getMinutes();
-        const sec = d.getSeconds();
-        const time = `${pad(day, 2)}-${pad(month, 2)}-${pad(year, 4)} ${pad(hour, 2)}:${pad(min, 2)}:${pad(sec, 2)}`;
-        return time;
+        return moment(d).format("DD-MM-yyyy HH:mm");
+        //const year = d.getFullYear();
+        //const month = d.getMonth() + 1;
+        //const day = d.getDate();
+        //const hour = d.getHours();
+        //const min = d.getMinutes();
+        //const sec = d.getSeconds();
+        //const time = `${pad(day, 2)}-${pad(month, 2)}-${pad(year, 4)} ${pad(hour, 2)}:${pad(min, 2)}:${pad(sec, 2)}`;
+        //return time;
     },
     writable: true,
     configurable: true

@@ -5,7 +5,7 @@
             <v-toolbar color="primary" dark text>
                 <v-app-bar-nav-icon @click="toggleSideNav"></v-app-bar-nav-icon>
                 <router-link to="/" tag="span" style="cursor: pointer">
-                    <h1 class="title">VueShare</h1>
+                    <h1 class="title">VueGraphDemo</h1>
                 </router-link>
             </v-toolbar>
 
@@ -33,20 +33,20 @@
             <!-- App Title -->
             <v-app-bar-nav-icon @click="toggleSideNav"></v-app-bar-nav-icon>
             <v-toolbar-title class="hidden-xs-only">
-                <router-link to="/" tag="span" style="cursor: pointer">VueShare</router-link>
+                <router-link to="/" tag="span" style="cursor: pointer">VueGraphDemo</router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
 
             <!-- Search Input -->
             <v-text-field v-model="searchTerm"
-                          @input="handleSearchPosts"
-                          flex
-                          prepend-icon="mdi-magnify"
-                          placeholder="Search posts"
-                          color="accent"
-                          single-line
-                          hide-details>
+                @input="handleSearchPosts"
+                flex
+                prepend-icon="mdi-magnify"
+                placeholder="Search posts"
+                color="accent"
+                single-line
+                hide-details>
             </v-text-field>
 
             <!-- Search Results Card -->
@@ -98,14 +98,14 @@
                 <!-- Auth SnackBar -->
                 <v-snackbar v-model="authSnackbar" color="success" :timeout="5000" bottom left>
                     <v-icon class="mr-3" color="white">mdi-check-circle</v-icon>
-                    <h3>You are now Signed In</h3>
+                    <h4>You are now Signed In</h4>
                     <v-btn dark text @click="authSnackbar = false">Close</v-btn>
                 </v-snackbar>
 
                 <!-- Auth Error SnackBar -->
                 <v-snackbar v-if="authError" v-model="authErrorSnackbar" color="error" :timeout="5000" bottom left>
                     <v-icon class="mr-3" color="white">mdi-cancel</v-icon>
-                    <h3>{{ authError.message }}</h3>
+                    <h4>{{ authError.message }}</h4>
                     <v-btn dark text to="/signin">Sign In</v-btn>
                 </v-snackbar>
 
@@ -211,6 +211,26 @@
 </script>
 
 <style>
+    h1 {
+        font-size: 1.5rem;
+        font-weight: 400;
+    }
+
+    h2 {
+        font-size: 1.375rem;
+        font-weight: 400;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 400;
+    }
+
+    h4 {
+        font-size: 1.125rem;
+        font-weight: 400;
+    }
+
     .fade-enter-active,
     .fade-leave-active {
         transition-property: opacity;
@@ -253,11 +273,28 @@
 
     div .theme--dark.v-list,
     div .theme--dark.v-card {
-        background: #303030;
+        background: #212121;
     }
 
     div .v-dialog > .v-card > .v-card__title {
         padding: 16px 12px 16px;
+    }
+
+    .v-application--is-ltr div .v-snack__action {
+        margin-right: 0;
+    }
+
+    div .v-snack__wrapper .v-btn {
+        margin-left: auto;
+    }
+
+    div .v-snack__content {
+        display: flex;
+        align-items: center;
+    }
+
+    div .v-subheader {
+        font-size: 1.25rem;
     }
 
     .bounce {

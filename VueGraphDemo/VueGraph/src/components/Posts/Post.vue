@@ -3,7 +3,7 @@
         <!-- Post Card -->
         <v-layout row wrap>
             <v-flex xs12>
-                <v-card hover>
+                <v-card style="background: #212121" hover>
                     <v-card-title>
                         <h1 class="mr-3">{{ post.title }}</h1>
                         <v-btn @click="handleToggleLike" large icon v-if="user">
@@ -36,10 +36,9 @@
                 </v-card>
             </v-flex>
         </v-layout>
-        <!-- Messages Section -->
-        <div class="mt-3">
-            <!-- Message Input-->
-            <v-layout class="mb-3" v-if="user">
+        <!-- Message Input-->
+        <v-container :class="!user ? '' : 'mt-7 mb-6'">
+            <v-layout v-if="user" row wrap>
                 <v-flex xs12>
                     <v-form v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleAddPostMessage">
                         <v-layout row>
@@ -50,35 +49,39 @@
                     </v-form>
                 </v-flex>
             </v-layout>
-            <!-- Messages -->
-            <v-layout row wrap>
-                <v-flex xs12>
-                    <v-list subheader two-line>
-                        <v-subheader>Messages ({{ post.messages.length }})</v-subheader>
-                        <template v-for="message in post.messages">
-                            <v-divider :key="message._id"></v-divider>
-                            <v-list-item inset :key="message.title">
-                                <v-list-item-avatar>
-                                    <img :src="message.messageUser.avatar">
-                                </v-list-item-avatar>
-                                <v-list-item-content>
-                                    <v-list-item-title>
-                                        {{ message.messageBody }}
-                                    </v-list-item-title>
-                                    <v-list-item-subtitle>
-                                        {{ message.messageUser.userName }}
-                                        <span class="grey--text text-lighten-1 hidden-xs-only">{{ unixTsToDateString(message.messageDate) }}</span>
-                                    </v-list-item-subtitle>
-                                </v-list-item-content>
-                                <v-list-item-action class="hidden-xs-only">
-                                    <v-icon :color="checkIfOwnMessage(message) ? 'accent' : 'grey'">mdi-comment</v-icon>
-                                </v-list-item-action>
-                            </v-list-item>
-                        </template>
-                    </v-list>
-                </v-flex>
-            </v-layout>
-        </div>
+        </v-container>
+        <!-- Messages -->
+        <v-layout row wrap class="mt-2">
+            <v-flex xs12>
+                <!-- Messages Section -->
+                <v-list subheader two-line v-if="post.messages && post.messages.length > 0">
+                    <v-subheader>Messages ({{ post.messages.length }})</v-subheader>
+                    <template v-for="message in post.messages">
+                        <v-divider :key="message._id"></v-divider>
+                        <v-list-item inset :key="message.title">
+                            <v-list-item-avatar>
+                                <img :src="message.messageUser.avatar">
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>
+                                    {{ message.messageBody }}
+                                </v-list-item-title>
+                                <v-list-item-subtitle>
+                                    {{ message.messageUser.userName }}
+                                    <span class="grey--text text-lighten-1 hidden-xs-only">{{ unixTsToTimeFromNow(message.messageDate) }}</span>
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                            <v-list-item-action class="hidden-xs-only">
+                                <v-icon :color="checkIfOwnMessage(message) ? 'accent' : 'grey'">mdi-comment</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </template>
+                </v-list>
+                <v-list subheader two-line v-else style="padding: 0">
+                    <v-subheader>No Messages</v-subheader>
+                </v-list>
+            </v-flex>
+        </v-layout>
     </v-container>
 </template>
 
@@ -87,6 +90,7 @@
     import { mapGetters } from "vuex";
     import { ADD_POST_MESSAGE, GET_POST, LIKE_POST, UNLIKE_POST } from "../../queries.js";
     import { apolloClient } from "../../main";
+    import moment from "moment";
 
     export default {
         name: "Post",
@@ -123,8 +127,8 @@
                     this.dialog = !this.dialog;
                 }
             },
-            unixTsToDateString(unixTs) {
-                return unixTs.unixTsToDateString();
+            unixTsToTimeFromNow(unixTs) {
+                return moment(new Date(parseFloat(unixTs))).fromNow();
             },
             handleAddPostMessage() {
                 if (!this.$refs.form.validate()) {
@@ -138,7 +142,7 @@
                 apolloClient.mutate({
                     mutation: ADD_POST_MESSAGE,
                     variables,
-                    update: (cache, { data: { addPostMessage }}) => {
+                    update: (cache, { data: { addPostMessage } }) => {
                         this.post.messages.unshift(addPostMessage);
                     }
                 }).then(({ data }) => {
@@ -170,8 +174,7 @@
                             data
                         });
                     }
-                })
-                .then(({ data }) => {
+                }).then(({ data }) => {
                     const updatedUser = {
                         ...this.user,
                         favorites: data.likePost.favorites
@@ -201,8 +204,7 @@
                             data
                         });
                     }
-                })
-                .then(({ data }) => {
+                }).then(({ data }) => {
                     const updatedUser = {
                         ...this.user,
                         favorites: data.unlikePost.favorites

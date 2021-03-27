@@ -11,8 +11,15 @@
                     </v-container>
                 </v-dialog>
             </v-layout>
+            <v-layout class="mt-2 mb-3" row wrap v-if="!loading">
+                <v-flex xs12>
+                    <v-btn class="accent" to="/posts" large dark>
+                        Explore Posts
+                    </v-btn>
+                </v-flex>
+            </v-layout>
             <v-flex x12 v-if="!loading && posts.length > 0">
-                <v-carousel v-bind="{ 'cycle': true }" interval="3000">
+                <v-carousel v-bind="{ 'cycle': true }" interval="3000" style="cursor: pointer">
                     <v-carousel-item v-for="post in posts" :key="post._id" :src="post.imageUrl" @click.native="goToPost(post._id)">
                         <h1 id="carousel__title">{{ post.title }}</h1>
                     </v-carousel-item>
@@ -32,7 +39,6 @@
                 </ul>
             </template>
         </ApolloQuery>-->
-        <v-btn color="accent" style="width: 150px">Test Button</v-btn>
     </v-app>
 </template>
 

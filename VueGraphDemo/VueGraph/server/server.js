@@ -39,15 +39,15 @@ const graphQlServer = new ApolloServer({
     }
 });
 
-const vueServer = new VueCli(path.resolve(__dirname, "../")); // Preventing: This relative module was not found: * ./src/main.js
-vueServer.init("development");
+const vueCliServer = new VueCli(path.resolve(__dirname, "../")); // Preventing: This relative module was not found: * ./src/main.js
+vueCliServer.init("development");
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).then(() => {
     console.log("DB Connected");
-    graphQlServer.listen().then(({ url }) => {
+    graphQlServer.listen({ port: 4000 }).then(({ url }) => {
         console.log(`GraphQl Playground Server listening on ${url}`);
-        vueServer.run("serve").then(({ url: vueUrl }) => {
-            console.log(`Vue Server listening on ${vueUrl}`);
+        vueCliServer.run("serve").then(({ url: vueUrl }) => {
+            console.log(`Vue Cli Server listening on ${vueUrl}`);
         });
     });
 })

@@ -1,62 +1,25 @@
 <template>
-    <v-container text-center text-sm-left :style="{background: this.$vuetify.theme.themes.dark.secondary}" dark>
-        <v-layout row wrap>
-            <v-flex xs12 sm6 offset-sm3>
+    <v-card>
+        <v-card-title class="headline" style="background: #303030">Add Post</v-card-title>
 
-                <v-form v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleAddPost">
+        <v-form style="background: #212121; margin: 0;" v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleUpdateUserPost">
+            <div style="padding: 12px">
+                <v-text-field :rules="titleRules" v-model="title" label="Post Title" type="text" required></v-text-field>
+                <v-text-field :rules="imageRules" v-model="imageUrl" label="Image URL" type="text" required></v-text-field>
+                <img :src="imageUrl" height="300">
+                <v-select v-model="categories" :rules="categoriesRules" :items="['Art', 'Education', 'Food', 'Furniture', 'Travel', 'Photography', 'Technology']" multiple label="Categories"></v-select>
+                <v-textarea :rules="descriptionRules" v-model="description" label="Description" type="text" required></v-textarea>
 
-                    <!-- Title -->
-                    <v-layout row>
-                        <v-flex xs12>
-                            <h1 style="color: white">Add Post</h1>
-                        </v-flex>
-                    </v-layout>
+                <v-divider></v-divider>
+                <v-spacer></v-spacer>
+                <div class="mt-2" style="text-align: right">
+                    <v-btn color="success" :disabled="!isFormValid" type="submit" class="mr-2">Update</v-btn>
+                    <v-btn color="error" @click="editPostDialog = false">Cancel</v-btn>
+                </div>
+            </div>
+        </v-form>
 
-                    <!-- Add Post Form -->
-
-                    <v-layout row>
-                        <v-flex xs12>
-                            <v-text-field :rules="titleRules" v-model="title" label="Post Title" type="text" required dark></v-text-field>
-                        </v-flex>
-                    </v-layout>
-
-                    <v-layout row>
-                        <v-flex xs12>
-                            <v-text-field :rules="imageRules" v-model="imageUrl" label="Image URL" type="text" required dark></v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row>
-                        <v-flex xs12>
-                            <img :src="imageUrl" height="300" />
-                        </v-flex>
-                    </v-layout>
-
-                    <v-layout row>
-                        <v-flex xs12>
-                            <v-select dark :rules="categoriesRules" v-model="categories" :items="['Art', 'Education', 'Food', 'Furniture', 'Travel', 'Photography', 'Technology']" multiple label="Categories"></v-select>
-                        </v-flex>
-                    </v-layout>
-
-                    <v-layout row>
-                        <v-flex xs12>
-                            <v-textarea :rules="descriptionRules" v-model="description" label="Description" type="text" required dark></v-textarea>
-                        </v-flex>
-                    </v-layout>
-
-                    <v-layout row>
-                        <v-flex xs12>
-                            <v-btn :loading="loading" :disabled="!isFormValid || loading" type="submit" color="info">
-                                <span slot="loader" class="custom-loader">
-                                    <v-icon light>mdi-cached</v-icon>
-                                </span>
-                                Submit
-                            </v-btn>
-                        </v-flex>
-                    </v-layout>
-                </v-form>
-            </v-flex>
-        </v-layout>
-    </v-container>
+    </v-card>
 </template>
 
 <script>

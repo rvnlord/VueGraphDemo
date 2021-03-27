@@ -4,9 +4,8 @@
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
-        "client": "npm run serve",
-        "concurrently": "concurrently --names \"server,client\" \"npm run server --silent\" \"npm run client --silent\"",
-        "server": "nodemon ./server/server.js"
+        "server": "nodemon ./server/server.js",
+        "deploy":  "npm run build && vercel --public" 
     },
     "main": "server.js",
     "dependencies": {
@@ -25,6 +24,7 @@
         "jsonwebtoken": "^8.5.1",
         "linq": "^3.2.3",
         "md5": "^2.3.0",
+        "moment": "^2.29.1",
         "mongoose": "^5.12.0",
         "sass": "^1.32.8",
         "uuid": "^3.4.0",

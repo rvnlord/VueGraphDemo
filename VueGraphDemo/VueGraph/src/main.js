@@ -13,7 +13,7 @@ Vue.component("form-alert", FormAlert);
 Vue.use(VueApollo);
 
 export const apolloClient = new ApolloClient({
-    uri: "http://localhost:4000/graphql",
+    uri: "http://localhost:4000/graphql", // uri: "https://vue-graph-demo-rvnlord-gmailcom.vercel.app/graphql", 
     fetchOptions: {
         credentials: "include"
     },
@@ -62,9 +62,16 @@ new Vue({
 const originalPush = Router.prototype.push;
 Router.prototype.push = function(location) {
     return originalPush.call(this, location).catch(err => {
-        if (err && err.name !== "NavigationDuplicated") {
-            throw err;
+        if (err && err.name === "NavigationDuplicated") {
+            return;
         }
+
+        if (err && err.message.startsWith("Redirected when going from ") && err.message.endsWith(" via a navigation guard.")) {
+            console.warn("Naviagation prevented by AuthGuard");
+            return;
+        }
+
+        throw err;
     });
 };
 

@@ -34,7 +34,7 @@
         </v-container>
         <v-container class="mt-3" v-else>
             <v-flex xs12 text-center>
-                <h2 class="font-weight-light">
+                <h2 class="font-weight-light mb-2">
                     Favorited
                     <span class="font-weight-regular"> ({{ userFavorites.length }})</span>
                 </h2>
@@ -42,10 +42,10 @@
             <v-layout row wrap>
                 <v-flex xs12 sm6 v-for="favorite in userFavorites" :key="favorite._id">
                     <v-card class="mt-3 ml-1 mr-2" hover>
-                        <v-responsive>
+                        <v-responsive @click="goToPost(favorite._id)">
                             <v-img height="30vh" :src="favorite.imageUrl"></v-img>
                         </v-responsive>
-                        <v-card-text>{{ favorite.title }}</v-card-text>
+                        <v-card-text><h4>{{ favorite.title }}</h4></v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -62,7 +62,7 @@
 
         <v-container class="mt-3" v-else>
             <v-flex xs12 text-center>
-                <h2 class="font-weight-light">
+                <h2 class="font-weight-light mb-2">
                     Your Posts
                     <span class="font-weight-regular">({{ userPosts.length }})</span>
                 </h2>
@@ -78,10 +78,10 @@
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
                         </v-container>
-                        <v-responsive>
+                        <v-responsive @click="goToPost(post._id)">
                             <v-img height="30vh" :src="post.imageUrl"></v-img>
                         </v-responsive>
-                        <v-card-text>{{ post.title }}</v-card-text>
+                        <v-card-text><h4>{{ post.title }}</h4></v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -98,7 +98,7 @@
                         <v-text-field :rules="imageRules" v-model="imageUrl" label="Image URL" type="text" required></v-text-field>
                         <img :src="imageUrl" height="300">
                         <v-select v-model="categories" :rules="categoriesRules" :items="['Art', 'Education', 'Food', 'Furniture', 'Travel', 'Photography', 'Technology']" multiple label="Categories"></v-select>
-                        <v-textarea :rules="descRules" v-model="description" label="Description" type="text" required></v-textarea>
+                        <v-textarea v-model="description" :rules="descriptionRules"  label="Description" type="text" required></v-textarea>
 
                         <v-divider></v-divider>
                         <v-spacer></v-spacer>
@@ -139,9 +139,9 @@
                 categoriesRules: [
                     categories => categories.length >= 1 || "At least one category is required"
                 ],
-                descRules: [
-                    desc => !!desc || "Description is required",
-                    desc => desc.length < 200 || "Description must have less than 200 characters"
+                descriptionRules: [
+                    description => !!description || "Description is required",
+                    description => description.length < 200 || "Description must have less than 200 characters"
                 ]
             };
         },
@@ -189,6 +189,9 @@
                 this.imageUrl = imageUrl;
                 this.categories = categories;
                 this.description = description;
+            },
+            goToPost(id) {
+                this.$router.push(`/posts/${id}`);
             }
         }
     };
